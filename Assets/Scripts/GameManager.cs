@@ -22,7 +22,8 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            if (_instance == null) {
+            if (_instance == null)
+            {
                 GameObject singletonObject = new GameObject();
                 _instance = singletonObject.AddComponent<GameManager>();
             }
@@ -31,7 +32,8 @@ public class GameManager : MonoBehaviour
     }
     private void Awake()
     {
-        if (_instance != null && _instance != this) {
+        if (_instance != null && _instance != this)
+        {
             Destroy(gameObject);
             return;
         }
@@ -53,29 +55,56 @@ public class GameManager : MonoBehaviour
         GunBulletCount = Pistol.BulletCount;
         UpdateGunBulletCount(GunBulletCount);
         AddGunType(Pistol.Type, Pistol);
+        currentGunType = Pistol;
 
+        GunType ShoutGun = new GunType()
+        {
+            Type = Gun.Shoutgun,
+            Name = "ShoutGun",
+            Damage = 10,
+            Icon = "",
+            shotSpeed = 30,
+            fireRate = 0.8f,
+            BulletCount = 50
+        };
+        AddGunType(ShoutGun.Type, ShoutGun);
 
+        GunType Rifle = new GunType()
+        {
+            Type = Gun.Rifle,
+            Name = "Rifle",
+            Damage = 10,
+            Icon = "",
+            shotSpeed = 20,
+            fireRate = 0.05f,
+            BulletCount = 120
+        };
+        AddGunType(Rifle.Type, Rifle);
     }
 
     void Update()
     {
-        Pause();
+        if (Input.GetKeyDown(KeyCode.Escape) && isGameStarted)
+            Pause();
+
+
     }
 
     public void Pause()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && isGameStarted) {
-            if (isPaused) {
-                Time.timeScale = 1f;
-                isPaused = false;
-                PauseUI.SetActive(false);
-            }
 
-            else {
-                Time.timeScale = 0f;
-                isPaused = true;
-                PauseUI.SetActive(true);
-            }
+        if (isPaused)
+        {
+            Time.timeScale = 1f;
+            isPaused = false;
+            PauseUI.SetActive(false);
+        }
+
+        else
+        {
+            Time.timeScale = 0f;
+            isPaused = true;
+            PauseUI.SetActive(true);
         }
     }
 
@@ -96,7 +125,7 @@ public class GameManager : MonoBehaviour
     public void AddGunType(Gun gun, GunType gunType)
     {
         gunTypes.Add(gun, gunType);
-        currentGunType = gunType;
+        //currentGunType = gunType;
         Debug.Log(gunTypes.Count);
     }
 
@@ -108,11 +137,14 @@ public class GameManager : MonoBehaviour
     public void ChangeGunType(Gun type)
     {
         currentGunType = gunTypes[type];
+        GunBulletCount = currentGunType.BulletCount;
+        UpdateGunBulletCount(GunBulletCount);
     }
 
     public void RemoveGunType(Gun type)
     {
-        if (gunTypes.ContainsKey(type)) {
+        if (gunTypes.ContainsKey(type))
+        {
             gunTypes.Remove(type);
         }
     }

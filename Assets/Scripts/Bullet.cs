@@ -27,13 +27,14 @@ public class Bullet : MonoBehaviour
     {
         bulletRb.linearVelocity = direction * GameManager.Instance.GetCurrentGunType().shotSpeed;
         if (GameManager.Instance.GetCurrentGunType().Type != Gun.Pistol) {
-            GameManager.Instance.GetCurrentGunType().BulletCount--;
-            GameManager.Instance.UpdateGunBulletCount(GameManager.Instance.GetCurrentGunType().BulletCount);
-            if (GameManager.Instance.GetCurrentGunType().BulletCount <= 0) {
-                GameManager.Instance.RemoveGunType(GameManager.Instance.GetCurrentGunType().Type);
+            GameManager.Instance.GunBulletCount--;
+            GameManager.Instance.UpdateGunBulletCount(GameManager.Instance.GunBulletCount);
+            if (GameManager.Instance.GunBulletCount <= 0) {
+                //GameManager.Instance.RemoveGunType(GameManager.Instance.GetCurrentGunType().Type);
                 GameManager.Instance.ChangeGunType(Gun.Pistol);
             }
         }
+        GameManager.Instance.UpdateGunBulletCount(GameManager.Instance.GunBulletCount);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

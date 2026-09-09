@@ -1,0 +1,36 @@
+{
+  "group_id": "7673b8cc-1cf3-478a-b1e6-8d7f122ca1f0",
+  "states": [
+    {
+      "character": {
+        "id": "f4e9b5c4-8ce8-46b8-ae75-ec61e437a587",
+        "name": "\u201creplace the head wi",
+        "prompt": "\u201cpixel art, 64x64 game sprite, high top-down view, uncanny office worker enemy, slim male humanoid, pale human-like skin, messy short dark brown hair, white wrinkled shirt, dark tie, dark trousers, dark shoes, subtle unsettling face, slightly hollow and emotionless, looks almost like a normal office worker but not quite right, low saturation colors, clean readable silhouette, transparent background, unity-ready\u201d",
+        "size": {
+          "width": 64,
+          "height": 64
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-09-09T06:55:34.348007+00:00"
+      },
+      "folder": "replace_the_head_wi_3",
+      "frames": {
+        "rotations": {
+          "south": "replace_the_head_wi_3/rotations/south.png",
+          "south-east": "replace_the_head_wi_3/rotations/south-east.png",
+          "east": "replace_the_head_wi_3/rotations/east.png",
+          "north-east": "replace_the_head_wi_3/rotations/north-east.png",
+          "north": "replace_the_head_wi_3/rotations/north.png",
+          "north-west": "replace_the_head_wi_3/rotations/north-west.png",
+          "west": "replace_the_head_wi_3/rotations/west.png",
+          "south-west": "replace_the_head_wi_3/rotations/south-west.png"
+        },
+        "animations": {}
+      }
+    }
+  ],
+  "export_version": "3.1",
+  "export_date": "2026-09-09T10:03:02.859331"
+}

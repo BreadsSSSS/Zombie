@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,8 +9,10 @@ public class PlayerController : MonoBehaviour
     public GameObject bulletPrefab;
     private float lastShotTime;
     private bool wantsToFire;
+    public int HP;
     void Start()
     {
+        HP = 100;
         rigidbody = GetComponent<Rigidbody2D>();
     }
 
@@ -49,5 +52,24 @@ public class PlayerController : MonoBehaviour
         GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
         bullet.GetComponent<Bullet>().Fire(fireDirection);
 
+    }
+
+    public void Hurt(int damage)
+    {
+        HP -= damage;
+        if(HP <= 0)
+        {
+            HP = 0;
+            // todo
+        }
+        StartCoroutine(FlashRed());
+    }
+
+    IEnumerator FlashRed()
+    {
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(0.5f);
+        spriteRenderer.color = Color.white;
     }
 }
