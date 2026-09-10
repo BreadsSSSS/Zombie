@@ -12,12 +12,14 @@ public class GameManager : MonoBehaviour
     public int MaxRound;
     private Dictionary<Gun, GunType> gunTypes = new Dictionary<Gun, GunType>();
     private GunType currentGunType;
-    public Image[] gunIcons;
+    public Sprite[] gunIcons;
     public int GunBulletCount;
     public GameObject BulletCountTxt;
     private bool isPaused = false;
     private bool isGameStarted = true;
     public GameObject PauseUI;
+    public Image GunIconUI;
+    public Image HpBarUI;
     public static GameManager Instance
     {
         get
@@ -134,10 +136,12 @@ public class GameManager : MonoBehaviour
         return currentGunType;
     }
 
-    public void ChangeGunType(Gun type)
+    public void ChangeGunType(Gun type,Sprite icon)
     {
         currentGunType = gunTypes[type];
         GunBulletCount = currentGunType.BulletCount;
+        GameObject.Find("Player/gun").GetComponent<SpriteRenderer>().sprite = icon;
+        GunIconUI.sprite = icon;
         UpdateGunBulletCount(GunBulletCount);
     }
 
@@ -153,5 +157,10 @@ public class GameManager : MonoBehaviour
     {
         GunBulletCount = count;
         BulletCountTxt.GetComponent<Text>().text = "残弾" + GunBulletCount.ToString();
+    }
+
+    public void UpdateHpBar()
+    {
+        HpBarUI.fillAmount = GameObject.Find("Player").GetComponent<PlayerController>().HP / 100f;
     }
 }

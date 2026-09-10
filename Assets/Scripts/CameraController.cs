@@ -19,6 +19,7 @@ public class CameraController : MonoBehaviour
         Vector3 pos = GameObject.Find("Player").transform.position;
         pos.x = pos.x < -17.5 ? -17.5f : pos.x;
         pos.x = pos.x > 17.5 ? 17.5f : pos.x;
+        pos.y = pos.y < -13 ? -13f : pos.y;
         transform.position = new Vector3(pos.x, pos.y, -10);
     }
 }

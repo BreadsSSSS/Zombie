@@ -107,6 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a465b198d764eb4e8cfb381f7a84889, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
+  gunSp: {fileID: 3568338459883032124, guid: 541ef432376a5444190c8161a0d0301d, type: 3}
 --- !u!58 &3190541382278635178
 CircleCollider2D:
   m_ObjectHideFlags: 0

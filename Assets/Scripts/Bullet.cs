@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 public class Bullet : MonoBehaviour
 {
     Rigidbody2D bulletRb;
+    public Sprite gunSp;
     void Awake()
     {
         bulletRb = GetComponent<Rigidbody2D>();
@@ -31,7 +32,7 @@ public class Bullet : MonoBehaviour
             GameManager.Instance.UpdateGunBulletCount(GameManager.Instance.GunBulletCount);
             if (GameManager.Instance.GunBulletCount <= 0) {
                 //GameManager.Instance.RemoveGunType(GameManager.Instance.GetCurrentGunType().Type);
-                GameManager.Instance.ChangeGunType(Gun.Pistol);
+                GameManager.Instance.ChangeGunType(Gun.Pistol, GameManager.Instance.gunIcons[0]);
             }
         }
         GameManager.Instance.UpdateGunBulletCount(GameManager.Instance.GunBulletCount);
