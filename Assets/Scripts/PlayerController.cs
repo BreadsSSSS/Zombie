@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
     {
         GunType gun = GameManager.Instance.GetCurrentGunType();
 
-        if (Mouse.current.leftButton.isPressed && Time.time - lastShotTime >= gun.fireRate) {
+        if (Mouse.current.leftButton.isPressed && Time.time - lastShotTime >= gun.fireRate && GameManager.Instance.isPaused == false) {
             lastShotTime = Time.time;
             Shoot();
         }
@@ -77,13 +77,21 @@ public class PlayerController : MonoBehaviour
 
     void Shoot()
     {
-        GameManager.Instance.DoSomething();
-
         Vector2 mousePos = Mouse.current.position.ReadValue();
         Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(mousePos);
         worldMousePos.z = 0f;
-
         Vector2 fireDirection = (worldMousePos - transform.position).normalized;
+
+        if (GameManager.Instance.GetCurrentGunType().Type == Gun.Shoutgun)
+        {
+            //todo
+
+            ShootShotgun(fireDirection);
+            return;
+        }
+
+        //GameManager.Instance.DoSomething();
+    
 
         GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
         bullet.GetComponent<Bullet>().Fire(fireDirection);
@@ -98,6 +106,7 @@ public class PlayerController : MonoBehaviour
             HP = 0;
             GameManager.Instance.UpdateHpBar();
             // todo
+            GameManager.Instance.GameOver();
 
         }
         StartCoroutine(FlashRed());
@@ -109,5 +118,28 @@ public class PlayerController : MonoBehaviour
         spriteRenderer.color = Color.red;
         yield return new WaitForSeconds(0.5f);
         spriteRenderer.color = Color.white;
+    }
+
+    void ShootShotgun(Vector2 baseDirection)
+    {
+        int pelletCount = 6;        // 一次发射几颗子弹
+        float spreadAngle = 30f;    // 散射总角度范围(度)，越大扇形越宽
+
+        // 计算基准角度
+        float baseAngle = Mathf.Atan2(baseDirection.y, baseDirection.x) * Mathf.Rad2Deg;
+
+        // 从 -spreadAngle/2 到 +spreadAngle/2 均匀分布 pelletCount 颗子弹
+        float angleStep = spreadAngle / (pelletCount - 1);
+        float startAngle = baseAngle - spreadAngle / 2f;
+
+        for (int i = 0; i < pelletCount; i++)
+        {
+            float angle = startAngle + angleStep * i;
+            float rad = angle * Mathf.Deg2Rad;
+            Vector2 direction = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
+
+            GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+            bullet.GetComponent<Bullet>().Fire(direction);
+        }
     }
 }

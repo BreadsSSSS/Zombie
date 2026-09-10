@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,13 +14,23 @@ public class Enemy : MonoBehaviour
     public EnemyType enemyType;
 
     private Animator animator;
-    private string currentAnimState = ""; // 记录当前播放的动画名，避免重复Play
+    private string currentAnimState = "";
     public float DamageRate = 0.8f;
     public int Damame = 10;
     public float LastDamgeTime;
+    public GameObject BossBullet;
+
+    public float bossAttackRange;
+    public float bossFireRate = 2f;
+    private float lastBossShotTime;
+
+    public GameObject[] Boxs;
+    public GameObject[] BodyParts;
+    public float BodyPartDropRate = 0.5f;
 
     void Start()
     {
+        target = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
         agent.updateUpAxis = false;
@@ -38,20 +49,43 @@ public class Enemy : MonoBehaviour
             agent.SetDestination(target.position);
         }
 
+        if (enemyType == EnemyType.Boss)
+        {
+            HandleBossAttack();
+        }
+
         UpdateWalkAnimation();
+    }
+
+    void HandleBossAttack()
+    {
+        if (target == null) return;
+
+        float distance = Vector2.Distance(transform.position, target.position);
+        if (distance > bossAttackRange) return;
+
+        if (Time.time - lastBossShotTime < bossFireRate) return;
+
+        lastBossShotTime = Time.time;
+        FireBossBullet();
+    }
+
+    void FireBossBullet()
+    {
+        if (BossBullet == null || target == null) return;
+
+        Vector2 direction = (target.position - transform.position).normalized;
+
+        GameObject bulletObj = Instantiate(BossBullet, transform.position, Quaternion.identity);
+        bulletObj.GetComponent<BossBullet>().Fire(direction);
     }
 
     void UpdateWalkAnimation()
     {
         Vector2 velocity = agent.velocity;
-
-        // 速度太小视为静止，不切换动画(这里默认继续播放最后一帧朝向的走路动画
-        // 如果你有单独的 Idle 动画，可以在这里 Play Idle)
         if (velocity.sqrMagnitude < 0.01f) return;
 
         string newState;
-
-        // 比较x和y方向哪个分量更大，决定用左右还是上下的动画
         if (Mathf.Abs(velocity.x) > Mathf.Abs(velocity.y))
         {
             newState = velocity.x > 0 ? "walk_west" : "walk_east";
@@ -66,8 +100,7 @@ public class Enemy : MonoBehaviour
 
     void PlayAnimation(string stateName)
     {
-        if (currentAnimState == stateName) return; // 已经在播这个动画了，不重复调用
-
+        if (currentAnimState == stateName) return;
         animator.Play(stateName);
         currentAnimState = stateName;
     }
@@ -82,13 +115,19 @@ public class Enemy : MonoBehaviour
         {
             Gizmos.DrawLine(path.corners[i], path.corners[i + 1]);
         }
+
+        if (enemyType == EnemyType.Boss)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, bossAttackRange);
+        }
     }
 
     public void TakeDamage(int damage)
     {
         health -= damage;
-        //StopAllCoroutines();
         StartCoroutine(FlashRed());
+
         if (health <= 0)
         {
             Die();
@@ -97,7 +136,65 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        if (enemyType == EnemyType.Normal)
+        {
+            DropBox();
+            DropBodyPart();
+        }
+
+        if (enemyType == EnemyType.Boss)
+        {
+            GameManager.Instance.WinGame();
+        }
+
+        GameManager.Instance.EnemyContro();
         Destroy(gameObject);
+    }
+
+    private void DropBox()
+    {
+        double num = Random.value;
+
+        if (num <= 0.9f && Boxs != null && Boxs.Length >= 2)
+        {
+            double num2 = Random.value;
+
+            if (num2 >= 0.5f)
+            {
+                Instantiate(Boxs[0], transform.position, Quaternion.identity);
+            }
+            else
+            {
+                Instantiate(Boxs[1], transform.position, Quaternion.identity);
+            }
+        }
+    }
+
+    private void DropBodyPart()
+    {
+        if (BodyParts == null || BodyParts.Length == 0)
+            return;
+
+        if (Random.value > BodyPartDropRate)
+            return;
+
+        int index = Random.Range(0, BodyParts.Length);
+
+        if (BodyParts[index] == null)
+            return;
+
+        GameObject bodyPart = Instantiate(
+            BodyParts[index],
+            transform.position,
+            Quaternion.identity
+        );
+
+        BodyPart bodyPartScript = bodyPart.GetComponent<BodyPart>();
+
+        if (bodyPartScript != null)
+        {
+            bodyPartScript.Launch();
+        }
     }
 
     IEnumerator FlashRed()
@@ -110,9 +207,9 @@ public class Enemy : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player")
         {
-            if(Time.time - LastDamgeTime >= DamageRate)
+            if (Time.time - LastDamgeTime >= DamageRate)
             {
                 LastDamgeTime = Time.time;
                 GameObject.Find("Player").GetComponent<PlayerController>().Hurt(Damame);

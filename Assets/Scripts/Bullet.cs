@@ -36,6 +36,7 @@ public class Bullet : MonoBehaviour
             }
         }
         GameManager.Instance.UpdateGunBulletCount(GameManager.Instance.GunBulletCount);
+        GameManager.Instance.PlayGunSound();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
