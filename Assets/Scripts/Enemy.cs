@@ -34,6 +34,11 @@ public class Enemy : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
         agent.updateUpAxis = false;
+        agent.speed = 4f;
+        if (enemyType == EnemyType.Boss)
+        {
+            agent.speed = 4.5f; // Boss moves slower
+        }
 
         animator = GetComponent<Animator>();
 

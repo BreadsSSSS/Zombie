@@ -196,7 +196,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4848941bee707ed418473fa38f4bb5ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  health: 2000
+  health: 3000
   target: {fileID: 0}
   updateRate: 0.5
   enemyType: 1
@@ -205,8 +205,10 @@ MonoBehaviour:
   LastDamgeTime: 0
   BossBullet: {fileID: 3084729323797911810, guid: 337b51a167d70664893c2e15631ace96, type: 3}
   bossAttackRange: 10
-  bossFireRate: 2
+  bossFireRate: 1
   Boxs: []
+  BodyParts: []
+  BodyPartDropRate: 0.5
 --- !u!114 &537781819835048741
 MonoBehaviour:
   m_ObjectHideFlags: 0

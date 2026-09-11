@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class BossBullet : MonoBehaviour
 {
-    public float speed = 8f;
-    public int damage = 20;
+    public float speed = 15f;
+    public int damage = 30;
     public float lifeTime = 5f;
 
     private Rigidbody2D rb;
@@ -15,14 +15,14 @@ public class BossBullet : MonoBehaviour
 
     void Start()
     {
-        Destroy(gameObject, lifeTime); // ´æ»îÊ±¼äµ½ÁË×Ô¶¯Ïú»Ù£¬±ÜÃâ·É³öµØÍ¼ºóÒ»Ö±Õ¼ÄÚ´æ
+        Destroy(gameObject, lifeTime); // ï¿½ï¿½ï¿½Ê±ï¿½äµ½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Ù£ï¿½ï¿½ï¿½ï¿½ï¿½É³ï¿½ï¿½ï¿½Í¼ï¿½ï¿½Ò»Ö±Õ¼ï¿½Ú´ï¿½
     }
 
     public void Fire(Vector2 direction)
     {
         rb.linearVelocity = direction * speed;
 
-        // ÈÃ×Óµ¯ÌùÍ¼³¯Ïò·ÉÐÐ·½Ïò
+        // ï¿½ï¿½ï¿½Óµï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð·ï¿½ï¿½ï¿½
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle);
     }

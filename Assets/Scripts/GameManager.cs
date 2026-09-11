@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
         {
             Type = Gun.Shoutgun,
             Name = "ShoutGun",
-            Damage = 20,
+            Damage = 30,
             Icon = "",
             shotSpeed = 30,
             fireRate = 0.8f,
@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
         {
             Type = Gun.Rifle,
             Name = "Rifle",
-            Damage = 10,
+            Damage = 20,
             Icon = "",
             shotSpeed = 20,
             fireRate = 0.05f,
@@ -251,13 +251,13 @@ public class GameManager : MonoBehaviour
         currentWave++;
 
         if (currentWave == 1)
-            enemyCount = 5;
-        else if (currentWave == 2)
             enemyCount = 10;
+        else if (currentWave == 2)
+            enemyCount = 20;
         else if (currentWave == 3)
-            enemyCount = 15;
+            enemyCount = 40;
         else if (currentWave == 4)
-            enemyCount = 15;
+            enemyCount = 40;
         else
             return;
 
